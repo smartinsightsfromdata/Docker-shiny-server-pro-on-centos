@@ -8,8 +8,7 @@ This is a typical dev configuration as it includes in one docker configuration:
 * RStudio
 * Shiny Server Pro
 
-## Please note this is a prototype - currently not working
-
+## Please note this is a WORKING prototype
 
 Build with (from the folder containing the Dockerfile):
 ```
@@ -21,7 +20,7 @@ Test with (this will show the supervisor interactions to the console):
 docker run -p 3838:3838 -p 8787:8787 -t -i smartinsightsfromdata/shinysrv
 ```
 
-If you don't want to save the container, run with (you could also use -v to store on your host the shiny folder to use on the server):
+If you don't want to save the container, run with (you could also use -v to use local volumes):
 ```
 docker run --rm  -p 3838:3838 -p 8787:8787  smartinsightsfromdata/shinysrv
 ```
