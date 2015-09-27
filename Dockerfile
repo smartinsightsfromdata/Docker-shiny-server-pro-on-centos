@@ -9,17 +9,17 @@ RUN yum install -y locales java-1.7.0-openjdk-devel tar
 # Misc packages
 
 RUN yum groupinstall -y "Development Tools"
-#RUN yum install -y rsyslog wget sudo git
-# devtools pre-requisites:
+
+# R devtools pre-requisites:
 RUN yum install -y wget git xml2 libxml2-devel curl curl-devel openssl-devel
 
-# WORKDIR /home/root
-
+WORKDIR /home/root
 RUN yum install -y R
-# RUN yum install -y wget
+
 RUN wget http://cran.r-project.org/src/contrib/rJava_0.9-7.tar.gz
-RUN R CMD INSTALL rJava_0.9-7.tar.gz \
-	&& R CMD javareconf
+RUN R CMD INSTALL rJava_0.9-7.tar.gz
+RUN R CMD javareconf \
+	&& rm -rf rJava_0.9-7.tar.gz
 
 #-----------------------
 
@@ -30,8 +30,11 @@ ENV LANG en_US.UTF-8
 
 RUN yum install -y openssl098e supervisor passwd pandoc
 
-RUN wget http://download2.rstudio.org/rstudio-server-rhel-0.99.484-x86_64.rpm
-RUN yum -y install --nogpgcheck rstudio-server-rhel-0.99.484-x86_64.rpm
+# RUN wget http://download2.rstudio.org/rstudio-server-rhel-0.99.484-x86_64.rpm
+# Go for the bleading edge:
+RUN wget https://s3.amazonaws.com/rstudio-dailybuilds/rstudio-server-rhel-0.99.697-x86_64.rpm
+RUN yum -y install --nogpgcheck rstudio-server-rhel-0.99.697-x86_64.rpm \
+	&& rm -rf rstudio-server-rhel-0.99.484-x86_64.rpm
 
 RUN groupadd rstudio \
 	&& useradd -g rstudio rstudio \
@@ -59,7 +62,7 @@ RUN mkdir -p /var/log/supervisor \
 
 COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 
-EXPOSE 8787 3838
+EXPOSE 8787 3838 4151
 
 
 
